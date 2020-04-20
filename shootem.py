@@ -9,7 +9,7 @@ img_dir = path.join(path.dirname(__file__), 'img')
 snd_dir = path.join(path.dirname(__file__), 'music')
 
 WIDTH = 680
-HEIGHT = 800 
+HEIGHT = 800
 FPS = 60 # faster FPS as it is an action game
 
 # define colors
@@ -129,6 +129,8 @@ shoot_sound = pygame.mixer.Sound(path.join(snd_dir, 'laser4.wav'))
 explosion_sounds = []
 for snd in ['boom0.wav', 'boom1.wav', 'boom2.wav', 'boom3.wav']:
     explosion_sounds.append(pygame.mixer.Sound(path.join(snd_dir, snd)))
+pygame.mixer.music.load(path.join(snd_dir, 'battleThemeA.mp3'))
+pygame.mixer.music.set_volume(0.4)
 
 all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
@@ -141,6 +143,8 @@ for i in range(8):
     mobs.add(m)
 score = 0
 
+# initialize music when game starts
+pygame.mixer.music.play(loops=-1)
 # Game loop
 running = True
 while running:
@@ -151,11 +155,11 @@ while running:
         # check for closing window
         if event.type == pygame.QUIT:
             running = False
-        
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 player.shoot()
-        
+
         # allows player to pause the game
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_p:
@@ -195,4 +199,3 @@ while running:
     pygame.display.flip()
 
 pygame.quit()
-
