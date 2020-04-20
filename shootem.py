@@ -6,6 +6,7 @@ from os import path
 pause = False
 
 img_dir = path.join(path.dirname(__file__), 'img')
+snd_dir = path.join(path.dirname(__file__), 'music')
 
 WIDTH = 680
 HEIGHT = 800 
@@ -62,6 +63,7 @@ class Player(pygame.sprite. Sprite):
         bullet = Bullet(self.rect.centerx, self.rect.top)
         all_sprites.add(bullet)
         bullets.add(bullet)
+        shoot_sound.play()
 
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
@@ -121,6 +123,9 @@ meteor_images = []
 meteor_list = ['meteor.png', 'meteorbig.png', 'meteor3.png', 'meteorsmall.png']
 for img in meteor_list:
     meteor_images.append(pygame.image.load(path.join(img_dir, img)).convert())
+
+# load sounds
+shoot_sound = pygame.mixer.Sound(path.join(snd_dir, 'laser4.wav'))
 
 all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
