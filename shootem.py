@@ -126,6 +126,9 @@ for img in meteor_list:
 
 # load sounds
 shoot_sound = pygame.mixer.Sound(path.join(snd_dir, 'laser4.wav'))
+explosion_sounds = []
+for snd in ['boom0.wav', 'boom1.wav', 'boom2.wav', 'boom3.wav']:
+    explosion_sounds.append(pygame.mixer.Sound(path.join(snd_dir, snd)))
 
 all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
@@ -172,6 +175,7 @@ while running:
     hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
     for hit in hits:
         score += 50 - hit.radius
+        random.choice(explosion_sounds).play()
         m = Mob()
         all_sprites.add(m)
         mobs.add(m)     # makes the mobs respawn after getting shot
