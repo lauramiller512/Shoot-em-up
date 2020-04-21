@@ -125,12 +125,12 @@ for img in meteor_list:
     meteor_images.append(pygame.image.load(path.join(img_dir, img)).convert())
 
 # load sounds
-shoot_sound = pygame.mixer.Sound(path.join(snd_dir, 'laser4.wav'))
+shoot_sound = pygame.mixer.Sound(path.join(snd_dir, 'laser11.wav'))
 explosion_sounds = []
 for snd in ['boom0.wav', 'boom1.wav', 'boom2.wav', 'boom3.wav']:
     explosion_sounds.append(pygame.mixer.Sound(path.join(snd_dir, snd)))
 pygame.mixer.music.load(path.join(snd_dir, 'battleThemeA.mp3'))
-pygame.mixer.music.set_volume(0.4)
+pygame.mixer.music.set_volume(0.8)
 
 all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
@@ -144,7 +144,7 @@ for i in range(8):
 score = 0
 
 # initialize music when game starts
-pygame.mixer.music.play(loops=-1)
+pygame.mixer.music.play()
 # Game loop
 running = True
 while running:
