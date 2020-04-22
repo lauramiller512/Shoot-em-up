@@ -35,6 +35,11 @@ def draw_text(surf, text, size, x, y):
     text_rect.midtop = (x, y)
     surf.blit(text_surface, text_rect)
 
+def newmob():
+    m = Mob()
+    all_sprites.add(m)
+    mobs.add(m)
+
 class Player(pygame.sprite. Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -139,9 +144,8 @@ bullets = pygame.sprite.Group()
 player = Player()
 all_sprites.add(player)
 for i in range(8):
-    m = Mob()
-    all_sprites.add(m)
-    mobs.add(m)
+    newmob()
+
 score = 0
 
 # initialize music when game starts
@@ -181,15 +185,14 @@ while running:
     for hit in hits:
         score += 50 - hit.radius
         random.choice(explosion_sounds).play()
-        m = Mob()
-        all_sprites.add(m)
-        mobs.add(m)     # makes the mobs respawn after getting shot
+        newmob()  # makes the mobs respawn after getting shot
 
     # check if a mob hits the player
     hits = pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_circle)
     for hit in hits:
         # creating damage amount per meteor hit
         player.shield -= hit.radius * 2
+        newmob()
         # Checking if the damage is greater than player's health
         if player.shield <= 0:
             running = False
