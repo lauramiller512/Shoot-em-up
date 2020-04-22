@@ -137,6 +137,30 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.kill()
 
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self, center, size):
+        pygame.sprite.Sprite.__init__(self)
+        self.size = size
+        self.image = explosion_anim[self.size](0)
+        self.rect = self.image.get_rect()
+        self.rect.center = center
+        self.frame = 0
+        self.last_update = pygame.time.get_ticks()
+        self.frame_rate = 50
+
+    def update(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_update > self.frame_rate:
+            self.last_update = now
+            self.frame += 1
+            if self.frame == len(explosion_anim[self.size]):
+                self.kill()
+            else:
+                center = self.rect.center
+                self.image = explosion_anim[self.size][self.frame]
+                self.rect - self.image.get_rect()
+                self.rect.center = center
+
 # load all graphics
 background = pygame.image.load(path.join(img_dir, 'spacebk.png')).convert()
 background_rect = background.get_rect()
@@ -147,6 +171,18 @@ meteor_images = []
 meteor_list = ['meteor.png', 'meteorbig.png', 'meteor3.png', 'meteorsmall.png']
 for img in meteor_list:
     meteor_images.append(pygame.image.load(path.join(img_dir, img)).convert())
+# {} creates a dictionary. We can later call both lg and sm sizes
+explosion_anim = {}
+explosion_anim['lg'] = []
+explosion_anim['sm'] = []
+for i in range(9):
+    filename = 'explosion0{}.png'.format(i)
+    img = pygame.image.load(path.join(img_dir, filename)).convert()
+    # img.set_colorkey(BLACK)
+    img_lg = pygame.transform.scale(img, (70, 70))
+    explosion_anim['lg'].append(img_lg)
+    img_sm = pygame.transform.scale(img, (30, 30))
+    explosion_anim['sm'].append(img_sm)
 
 # load sounds
 shoot_sound = pygame.mixer.Sound(path.join(snd_dir, 'laser11.wav'))
@@ -154,7 +190,7 @@ explosion_sounds = []
 for snd in ['boom0.wav', 'boom1.wav', 'boom2.wav', 'boom3.wav']:
     explosion_sounds.append(pygame.mixer.Sound(path.join(snd_dir, snd)))
 pygame.mixer.music.load(path.join(snd_dir, 'battleThemeA.mp3'))
-pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.set_volume(0.4)
 
 all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
@@ -180,6 +216,7 @@ while running:
             running = False
 
         # allows player to pause the game
+        # It's currently not possible to quit while game is paused
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_p:
                 pause = True
@@ -199,6 +236,8 @@ while running:
     for hit in hits:
         score += 50 - hit.radius
         random.choice(explosion_sounds).play()
+        expl = Explosion(hit.rect.center, 'lg')
+        all_sprites.add(expl)
         newmob()  # makes the mobs respawn after getting shot
 
     # check if a mob hits the player
