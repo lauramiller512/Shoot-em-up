@@ -45,6 +45,7 @@ class Player(pygame.sprite. Sprite):
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
+        self.shield = 100
 
     def update(self):
         self.speedx = 0
@@ -185,9 +186,13 @@ while running:
         mobs.add(m)     # makes the mobs respawn after getting shot
 
     # check if a mob hits the player
-    hits = pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
-    if hits:
-        running = False
+    hits = pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_circle)
+    for hit in hits:
+        # creating damage amount per meteor hit
+        player.shield -= hit.radius * 2
+        # Checking if the damage is greater than player's health
+        if player.shield <= 0:
+            running = False
 
 
     # Draw / render
