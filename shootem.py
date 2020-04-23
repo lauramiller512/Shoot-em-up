@@ -141,7 +141,7 @@ class Explosion(pygame.sprite.Sprite):
     def __init__(self, center, size):
         pygame.sprite.Sprite.__init__(self)
         self.size = size
-        self.image = explosion_anim[self.size](0)
+        self.image = explosion_anim[self.size][0]
         self.rect = self.image.get_rect()
         self.rect.center = center
         self.frame = 0
@@ -158,7 +158,7 @@ class Explosion(pygame.sprite.Sprite):
             else:
                 center = self.rect.center
                 self.image = explosion_anim[self.size][self.frame]
-                self.rect - self.image.get_rect()
+                self.rect = self.image.get_rect()
                 self.rect.center = center
 
 # load all graphics
